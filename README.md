@@ -35,7 +35,8 @@ Ashish D'Souza - [@computer-geek64](https://github.com/computer-geek64)
 
 ## Releases
 
-The current stable release for **Huffskew** is [v1.0.0](https://github.com/computer-geek64/huffskew/releases/latest)
+**Huffskew** is currently under development, no stable releases exist yet.
+<!--The current stable release for **Huffskew** is [v1.0.0](https://github.com/computer-geek64/huffskew/releases/latest)-->
 
 
 ## Versioning
