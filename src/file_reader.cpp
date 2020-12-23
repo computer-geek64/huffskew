@@ -1,10 +1,12 @@
 // file_reader.cpp
 // Ashish D'Souza
 
+#include <cstddef>
+#include <fstream>
 #include <string>
 #include <vector>
-#include <fstream>
-#include <cstddef>
+#include <unordered_map>
+#include <iostream>
 #include "file_reader.hpp"
 
 using namespace std;
@@ -21,26 +23,27 @@ void FileReader::open(const string filename, const size_t chunkSize) {
     file = ifstream(filename, fstream::binary);
 }
 
-int FileReader::read(vector<char*> &data) {
+void FileReader::read(vector<string> &data, unordered_map<string, unsigned int> &frequency) {
     char *buffer;
     size_t bytesRead;
 
     while((bytesRead = file.readsome(buffer = new char[chunkSize], chunkSize)) == chunkSize) {
-        data.push_back(buffer);
+        string chunk(buffer, bytesRead);
+
+        if(frequency.find(buffer) == frequency.end()) {
+            frequency[chunk] = 1;
+        }
+        else {
+            frequency[chunk]++;
+        }
+
+        data.push_back(chunk);
     }
 
     if(bytesRead > 0) {
-        for(unsigned int i = bytesRead; i < chunkSize; i++) {
-            buffer[i] = 0;
-        }
-
+        string chunk(buffer, bytesRead);
         data.push_back(buffer);
     }
-    else {
-        delete [] buffer;
-    }
-
-    return bytesRead;
 }
 
 FileReader::~FileReader() {

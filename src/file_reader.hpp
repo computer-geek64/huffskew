@@ -4,10 +4,11 @@
 #ifndef FILE_READER_HPP
 #define FILE_READER_HPP
 
+#include <cstddef>
+#include <fstream>
 #include <string>
 #include <vector>
-#include <fstream>
-#include <cstddef>
+#include <unordered_map>
 
 
 class FileReader {
@@ -20,7 +21,7 @@ public:
 
     void open(const std::string, const std::size_t);
 
-    void read(std::vector<char*> &);
+    void read(std::vector<std::string>&, std::unordered_map<std::string, unsigned int>&);
 
     ~FileReader();
 };

@@ -15,7 +15,6 @@ using namespace std;
 
 int main(int argc, char **argv) {
     if(argc < 5) {
-        // Show help
         showHelp();
 
         return 1;
@@ -39,15 +38,18 @@ int main(int argc, char **argv) {
 
     size_t chunkSize = 1;  // Bytes
     FileReader fileReader(inputFilename, chunkSize);
-    vector<char*> data;
-    size_t bytesRead = fileReader.read(data);
+    vector<string> data;
+    unordered_map<string, unsigned int> frequency;
+    fileReader.read(data, frequency);
 
     for(unsigned int i = 0; i < data.size(); i++) {
-        for(unsigned int c = 0; c < chunkSize; c++) {
-            cout << data[i][c];
-        }
+        cout << data[i];
     }
     cout << endl;
+
+    for(auto &x : frequency) {
+        cout << x.first << ": " << x.second << endl;
+    }
 
     return 0;
 }
