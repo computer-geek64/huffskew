@@ -42,7 +42,7 @@ void FileReader::read(vector<string> &data, unordered_map<string, unsigned int> 
 
     if(bytesRead > 0) {
         string chunk(buffer, bytesRead);
-        data.push_back(buffer);
+        data.push_back(chunk);
     }
 }
 
