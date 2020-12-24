@@ -13,7 +13,7 @@ HuffmanTreeNode::HuffmanTreeNode(string symbol, unsigned int frequency) : symbol
 
 HuffmanTreeNode::HuffmanTreeNode(HuffmanTreeNode *left, HuffmanTreeNode *right) : left(left), right(right), frequency(left->getFrequency() + right->getFrequency())  {}
 
-bool HuffmanTreeNode::isLeaf() {
+bool HuffmanTreeNode::isLeaf() const {
     return left == nullptr && right == nullptr;
 }
 

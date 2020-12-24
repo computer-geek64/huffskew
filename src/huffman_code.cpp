@@ -12,6 +12,12 @@ HuffmanCode::HuffmanCode() {}
 
 HuffmanCode::HuffmanCode(string code, size_t length) : code(code), length(length) {}
 
+string HuffmanCode::getFullBytes() {
+    string sub = code.substr(0, length / 8);
+    code.erase(0, length / 8);
+    return sub;
+}
+
 string HuffmanCode::getCode() const {
     return code;
 }

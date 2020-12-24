@@ -17,6 +17,8 @@ public:
 
     HuffmanCode(std::string, std::size_t);
 
+    std::string getFullBytes();
+
     std::string getCode() const;
 
     std::size_t getLength() const;

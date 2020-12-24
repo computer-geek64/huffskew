@@ -2,6 +2,7 @@
 
 huffskew
 main.o
+compress.o
 file_reader.o
 huffman_tree_builder.o
 huffman_tree_node.o

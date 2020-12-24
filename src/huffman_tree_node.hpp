@@ -22,7 +22,7 @@ public:
 
     HuffmanTreeNode(HuffmanTreeNode*, HuffmanTreeNode*);
 
-    bool isLeaf();
+    bool isLeaf() const;
 
     void setLeft(HuffmanTreeNode*);
 

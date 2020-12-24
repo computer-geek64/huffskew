@@ -7,16 +7,13 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "huffman_code.hpp"
 #include "huffman_tree_node.hpp"
 
 
-void buildHuffmanTree(std::unordered_map<std::string, unsigned int>&);
+HuffmanTreeNode* buildHuffmanTree(std::unordered_map<std::string, unsigned int>&);
 
 std::vector<std::string> replaceSingularFrequencies(std::unordered_map<std::string, unsigned int>&);
 
 void assignCodes(HuffmanTreeNode*, std::vector<char> = std::vector<char>());
-
-HuffmanCode concatenateHuffmanCodes(const HuffmanCode&, const HuffmanCode&);
 
 #endif

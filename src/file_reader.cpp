@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include <iostream>
 #include "file_reader.hpp"
 
 using namespace std;
