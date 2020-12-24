@@ -8,6 +8,7 @@
 #include <vector>
 #include <unordered_map>
 #include "file_reader.hpp"
+#include "huffman_tree_builder.hpp"
 #include "main.hpp"
 
 using namespace std;
@@ -50,6 +51,8 @@ int main(int argc, char **argv) {
     for(auto &x : frequency) {
         cout << x.first << ": " << x.second << endl;
     }
+
+    buildHuffmanTree(frequency);
 
     return 0;
 }
