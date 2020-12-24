@@ -39,12 +39,14 @@ void buildHuffmanTree(unordered_map<string, unsigned int> &frequency) {
     }
 
     HuffmanTreeNode *root = priorityQueue.top();
+    vector<char> stack;
+    assignCodes(root);
 
-    cout << "Root: " << root->getSymbol() << ": " << root->getFrequency() << endl;
-    cout << "Left: " << root->getLeft()->getSymbol() << ": " << root->getLeft()->getFrequency() << endl;
-    cout << "Right: " << root->getRight()->getSymbol() << ": " << root->getRight()->getFrequency() << endl;
-    cout << "Right Left: " << root->getRight()->getLeft()->getSymbol() << ": " << root->getRight()->getLeft()->getFrequency() << endl;
-    cout << "Right Right: " << root->getRight()->getRight()->getSymbol() << ": " << root->getRight()->getRight()->getFrequency() << endl;
+    cout << "Root: " << root->getFrequency() << endl;
+    cout << "Left: " << root->getLeft()->getSymbol() << ": " << root->getLeft()->getFrequency() << ": " << hex << (short) root->getLeft()->getCode()[0] << endl;
+    cout << "Right: " << root->getRight()->getFrequency() << endl;
+    cout << "Right Left: " << root->getRight()->getLeft()->getSymbol() << ": " << root->getRight()->getLeft()->getFrequency() << ": " << (short) root->getRight()->getLeft()->getCode()[0] << endl;
+    cout << "Right Right: " << root->getRight()->getRight()->getSymbol() << ": " << root->getRight()->getRight()->getFrequency() << ": " << (short) root->getRight()->getRight()->getCode()[0] << endl;
 }
 
 vector<string> replaceSingularFrequencies(unordered_map<string, unsigned int> &frequency) {
@@ -59,4 +61,28 @@ vector<string> replaceSingularFrequencies(unordered_map<string, unsigned int> &f
     }
 
     return singular;
+}
+
+void assignCodes(HuffmanTreeNode *node, vector<char> stack) {
+    if(node->isLeaf()) {
+        string code;
+        char c = 0;
+        for(unsigned int i = 0; i < stack.size(); i++) {
+            c |= stack[i] << ((7 - i) % 8);
+            if(i % 8 == 7) {
+                code.push_back(c);
+                c = 0;
+            }
+        }
+
+        if(c != 0) code.push_back(c);
+
+        node->setCode(code, stack.size());
+    }
+
+    stack.push_back(0);
+    if(node->getLeft() != nullptr) assignCodes(node->getLeft(), stack);
+
+    stack[stack.size() - 1] = 1;
+    if(node->getRight() != nullptr) assignCodes(node->getRight(), stack);
 }
