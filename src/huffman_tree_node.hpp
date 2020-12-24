@@ -6,6 +6,7 @@
 
 #include <cstddef>
 #include <string>
+#include "huffman_code.hpp"
 
 
 class HuffmanTreeNode {
@@ -13,12 +14,12 @@ class HuffmanTreeNode {
     HuffmanTreeNode *right;
     std::string symbol;
     unsigned int frequency;
-    std::string code;
-    std::size_t codeLength;
+    HuffmanCode huffmanCode;
 
 
 public:
     HuffmanTreeNode(std::string, unsigned int);
+
     HuffmanTreeNode(HuffmanTreeNode*, HuffmanTreeNode*);
 
     bool isLeaf();
@@ -35,11 +36,9 @@ public:
 
     unsigned int getFrequency() const;
 
-    void setCode(std::string, std::size_t);
+    void setHuffmanCode(HuffmanCode);
 
-    std::string getCode() const;
-
-    std::size_t getCodeLength() const;
+    HuffmanCode getHuffmanCode() const;
 
     ~HuffmanTreeNode();
 };

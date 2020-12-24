@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <string>
+#include "huffman_code.hpp"
 #include "huffman_tree_node.hpp"
 
 using namespace std;
@@ -40,17 +41,12 @@ unsigned int HuffmanTreeNode::getFrequency() const {
     return frequency;
 }
 
-void HuffmanTreeNode::setCode(string code, size_t codeLength) {
-    this->code = code;
-    this->codeLength = codeLength;
+void HuffmanTreeNode::setHuffmanCode(HuffmanCode huffmanCode) {
+    this->huffmanCode = huffmanCode;
 }
 
-string HuffmanTreeNode::getCode() const {
-    return code;
-}
-
-size_t HuffmanTreeNode::getCodeLength() const {
-    return codeLength;
+HuffmanCode HuffmanTreeNode::getHuffmanCode() const {
+    return huffmanCode;
 }
 
 HuffmanTreeNode::~HuffmanTreeNode() {
