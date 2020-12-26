@@ -9,7 +9,10 @@
 using namespace std;
 
 
-HuffmanTreeNode::HuffmanTreeNode(vector<char> symbol, unsigned int frequency) : symbol(symbol), frequency(frequency) {}
+HuffmanTreeNode::HuffmanTreeNode(vector<char> symbol, unsigned int frequency) : symbol(symbol), frequency(frequency) {
+    left = nullptr;
+    right = nullptr;
+}
 
 HuffmanTreeNode::HuffmanTreeNode(HuffmanTreeNode *left, HuffmanTreeNode *right) : left(left), right(right), frequency(left->getFrequency() + right->getFrequency())  {}
 

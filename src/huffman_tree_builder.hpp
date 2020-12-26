@@ -11,9 +11,7 @@
 #include "huffman_tree_node.hpp"
 
 
-HuffmanTreeNode* buildHuffmanTree(std::unordered_map<std::vector<char>, unsigned int, VectorHash<std::vector<char>>>&, std::vector<std::vector<char>>&);
-
-std::vector<std::vector<char>> replaceSingularFrequencies(std::unordered_map<std::vector<char>, unsigned int, VectorHash<std::vector<char>>>&);
+HuffmanTreeNode* buildHuffmanTree(std::unordered_map<std::vector<char>, unsigned int, VectorHash<std::vector<char>>>&);
 
 std::unordered_map<std::vector<char>, HuffmanCode, VectorHash<std::vector<char>>> assignHuffmanCodes(HuffmanTreeNode*, std::vector<char> = std::vector<char>());
 

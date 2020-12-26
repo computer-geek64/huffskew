@@ -12,9 +12,7 @@
 using namespace std;
 
 
-HuffmanTreeNode* buildHuffmanTree(unordered_map<vector<char>, unsigned int, VectorHash<vector<char>>> &frequency, vector<vector<char>> &singular) {
-    // Get list of symbols with singular frequencies
-    singular = replaceSingularFrequencies(frequency);
+HuffmanTreeNode* buildHuffmanTree(unordered_map<vector<char>, unsigned int, VectorHash<vector<char>>> &frequencies) {
 
     // Build priority queue of Huffman tree nodes
     class HuffmanTreeNodeComparator {
@@ -25,7 +23,7 @@ HuffmanTreeNode* buildHuffmanTree(unordered_map<vector<char>, unsigned int, Vect
     };
 
     priority_queue<HuffmanTreeNode*, vector<HuffmanTreeNode*>, HuffmanTreeNodeComparator> priorityQueue;
-    for(auto symbol : frequency) {
+    for(auto symbol : frequencies) {
         HuffmanTreeNode *huffmanTreeNode = new HuffmanTreeNode(symbol.first, symbol.second);
         priorityQueue.push(huffmanTreeNode);
     }
@@ -42,20 +40,6 @@ HuffmanTreeNode* buildHuffmanTree(unordered_map<vector<char>, unsigned int, Vect
     }
 
     return priorityQueue.top();
-}
-
-vector<vector<char>> replaceSingularFrequencies(unordered_map<vector<char>, unsigned int, VectorHash<vector<char>>> &frequency) {
-    vector<vector<char>> singular;
-    for(auto symbol : frequency) {
-        if(symbol.second == 1) singular.push_back(symbol.first);
-    }
-
-    frequency[singular[0]] = singular.size();
-    for(unsigned int i = 1; i < singular.size(); i++) {
-        frequency.erase(singular[i]);
-    }
-
-    return singular;
 }
 
 unordered_map<vector<char>, HuffmanCode, VectorHash<vector<char>>> assignHuffmanCodes(HuffmanTreeNode *node, vector<char> stack) {

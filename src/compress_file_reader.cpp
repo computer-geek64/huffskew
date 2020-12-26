@@ -23,21 +23,29 @@ void FileReader::open(const string filename, const size_t chunkSize) {
     file = ifstream(filename, fstream::binary);
 }
 
-void FileReader::read(vector<vector<char>> &data, unordered_map<vector<char>, unsigned int, VectorHash<vector<char>>> &frequency) {
-    char *buffer;
+void FileReader::read(vector<vector<char>> &data, unordered_map<vector<char>, unsigned int, VectorHash<vector<char>>> &frequencies, vector<vector<char>> &singular) {
+    char buffer[chunkSize];
     size_t bytesRead;
 
-    while((bytesRead = file.readsome(buffer = new char[chunkSize], chunkSize)) == chunkSize) {
+    while((bytesRead = file.readsome(buffer, chunkSize)) == chunkSize) {
         vector<char> chunk;
         for(unsigned int i = 0; i < bytesRead; i++) {
             chunk.push_back(buffer[i]);
         }
 
-        if(frequency.find(chunk) == frequency.end()) {
-            frequency[chunk] = 1;
+        if(frequencies.find(chunk) == frequencies.end()) {
+            frequencies[chunk] = 1;
+            singular.push_back(chunk);
         }
         else {
-            frequency[chunk]++;
+            frequencies[chunk]++;
+
+            for(unsigned int position = 0; position < singular.size(); position++) {
+                if(singular[position] == chunk) {
+                    singular.erase(singular.begin() + position);
+                    break;
+                }
+            }
         }
 
         data.push_back(chunk);

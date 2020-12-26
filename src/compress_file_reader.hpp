@@ -22,7 +22,7 @@ public:
 
     void open(const std::string, const std::size_t);
 
-    void read(std::vector<std::vector<char>>&, std::unordered_map<std::vector<char>, unsigned int, VectorHash<std::vector<char>>>&);
+    void read(std::vector<std::vector<char>>&, std::unordered_map<std::vector<char>, unsigned int, VectorHash<std::vector<char>>>&, std::vector<std::vector<char>>&);
 
     ~FileReader();
 };
