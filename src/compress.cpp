@@ -5,45 +5,53 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "file_reader.hpp"
+#include "vector_hash.hpp"
+#include "compress_file_reader.hpp"
 #include "huffman_code.hpp"
 #include "huffman_tree_node.hpp"
 #include "huffman_tree_builder.hpp"
 #include "compress.hpp"
+#include <iostream>
 
 using namespace std;
 
 
 void compress(string inputFilename, string outputFilename, size_t chunkSize) {
     FileReader fileReader(inputFilename, chunkSize);
-    vector<string> data;
-    unordered_map<string, unsigned int> frequency;
+    vector<vector<char>> data;
+    unordered_map<vector<char>, unsigned int, VectorHash<vector<char>>> frequency;
 
     // Read data from file
     fileReader.read(data, frequency);
 
     // Build Huffman tree
-    HuffmanTreeNode *root = buildHuffmanTree(frequency);
-}
+    vector<vector<char>> singular;
+    HuffmanTreeNode *root = buildHuffmanTree(frequency, singular);
 
-HuffmanCode concatenateHuffmanCodes(const HuffmanCode &a, const HuffmanCode &b) {
-    // Copy all bytes from a to code
-    string code(a.getCode());
-
-    if (a.getLength() % 8 == 0) {
-        code.push_back(0);
+    // Generate symbol table
+    /*map<vector<char>, HuffmanCode> symbolTable = assignHuffmanCodes(root);
+    for(unsigned int i = 1; i < singular.size(); i++) {
+        symbolTable[singular[i]] = symbolTable[singular[0]];
     }
 
-    for (unsigned int bChar = 0; bChar <= (b.getLength() / 8); bChar++) {
-        code[a.getLength() / 8 + bChar] |= (unsigned char) b.getCode()[bChar] >> (a.getLength() % 8);  // Bitwise right shift zero extend
-        code.push_back(0);
-        code[a.getLength() / 8 + bChar + 1] |= b.getCode()[bChar] << (8 - (a.getLength() % 8));
+    for(auto symbol : symbolTable) {
+        cout << symbol.first[0] << ": " << hex << (short) symbol.second.getCode()[0] << ": " << dec << symbol.second.getLength() << endl;
     }
 
-    // Remove last byte if unnecessary
-    if (a.getLength() % 8 + b.getLength() % 8 <= 8) {
-        code.pop_back();
-    }
+    // Prints huffman compression of file
+    HuffmanCode curr = symbolTable[data[0]];
+    HuffmanCode next;
+    for(unsigned int i = 0; i < data.size() - 1; i++) {
+        next = symbolTable[data[i + 1]];
 
-    return HuffmanCode(code, a.getLength() + b.getLength());
+        curr = concatenateHuffmanCodes(curr, next);
+        cout << "Size: " << curr.getCode().size() << endl;
+        cout << "Length: " << curr.getLength() << endl;
+        for(char c : curr.getFullBytes()) {
+            cout << "NEW BYTES: " << hex << (short) c << endl;
+        }
+        cout << "New size: " << curr.getCode().size() << endl;
+        cout << "New length: " << curr.getLength() << endl;
+    }
+    cout << hex << (short) curr.getCode()[0] << endl;*/
 }

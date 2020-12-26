@@ -5,21 +5,21 @@
 #define HUFFMAN_CODE_HPP
 
 #include <cstddef>
-#include <string>
+#include <vector>
 
 
 class HuffmanCode {
-    std::string code;
+    std::vector<char> code;
     std::size_t length;
 
 public:
     HuffmanCode();
 
-    HuffmanCode(std::string, std::size_t);
+    HuffmanCode(std::vector<char>, std::size_t);
 
-    std::string getFullBytes();
+    std::vector<char> getFullBytes();
 
-    std::string getCode() const;
+    std::vector<char> getCode() const;
 
     std::size_t getLength() const;
 

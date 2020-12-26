@@ -1,14 +1,15 @@
 // file_reader.hpp
 // Ashish D'Souza
 
-#ifndef FILE_READER_HPP
-#define FILE_READER_HPP
+#ifndef COMPRESS_FILE_READER_HPP
+#define COMPRESS_FILE_READER_HPP
 
 #include <cstddef>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include "vector_hash.hpp"
 
 
 class FileReader {
@@ -21,7 +22,7 @@ public:
 
     void open(const std::string, const std::size_t);
 
-    void read(std::vector<std::string>&, std::unordered_map<std::string, unsigned int>&);
+    void read(std::vector<std::vector<char>>&, std::unordered_map<std::vector<char>, unsigned int, VectorHash<std::vector<char>>>&);
 
     ~FileReader();
 };

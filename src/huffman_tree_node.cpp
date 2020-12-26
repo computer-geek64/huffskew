@@ -2,14 +2,14 @@
 // Ashish D'Souza
 
 #include <cstddef>
-#include <string>
+#include <vector>
 #include "huffman_code.hpp"
 #include "huffman_tree_node.hpp"
 
 using namespace std;
 
 
-HuffmanTreeNode::HuffmanTreeNode(string symbol, unsigned int frequency) : symbol(symbol), frequency(frequency) {}
+HuffmanTreeNode::HuffmanTreeNode(vector<char> symbol, unsigned int frequency) : symbol(symbol), frequency(frequency) {}
 
 HuffmanTreeNode::HuffmanTreeNode(HuffmanTreeNode *left, HuffmanTreeNode *right) : left(left), right(right), frequency(left->getFrequency() + right->getFrequency())  {}
 
@@ -33,7 +33,7 @@ HuffmanTreeNode* HuffmanTreeNode::getRight() const {
     return right;
 }
 
-string HuffmanTreeNode::getSymbol() const {
+vector<char> HuffmanTreeNode::getSymbol() const {
     return symbol;
 }
 

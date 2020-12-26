@@ -3,7 +3,9 @@
 huffskew
 main.o
 compress.o
-file_reader.o
+compress_file_reader.o
+compress_file_writer.o
 huffman_tree_builder.o
 huffman_tree_node.o
 huffman_code.o
+vector_hash.o

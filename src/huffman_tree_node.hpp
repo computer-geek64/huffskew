@@ -5,20 +5,20 @@
 #define HUFFMAN_TREE_NODE_HPP
 
 #include <cstddef>
-#include <string>
+#include <vector>
 #include "huffman_code.hpp"
 
 
 class HuffmanTreeNode {
     HuffmanTreeNode *left;
     HuffmanTreeNode *right;
-    std::string symbol;
+    std::vector<char> symbol;
     unsigned int frequency;
     HuffmanCode huffmanCode;
 
 
 public:
-    HuffmanTreeNode(std::string, unsigned int);
+    HuffmanTreeNode(std::vector<char>, unsigned int);
 
     HuffmanTreeNode(HuffmanTreeNode*, HuffmanTreeNode*);
 
@@ -32,7 +32,7 @@ public:
 
     HuffmanTreeNode* getRight() const;
 
-    std::string getSymbol() const;
+    std::vector<char> getSymbol() const;
 
     unsigned int getFrequency() const;
 

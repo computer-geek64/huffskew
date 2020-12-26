@@ -6,7 +6,8 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "file_reader.hpp"
+#include "vector_hash.hpp"
+#include "compress_file_reader.hpp"
 
 using namespace std;
 
@@ -22,14 +23,17 @@ void FileReader::open(const string filename, const size_t chunkSize) {
     file = ifstream(filename, fstream::binary);
 }
 
-void FileReader::read(vector<string> &data, unordered_map<string, unsigned int> &frequency) {
+void FileReader::read(vector<vector<char>> &data, unordered_map<vector<char>, unsigned int, VectorHash<vector<char>>> &frequency) {
     char *buffer;
     size_t bytesRead;
 
     while((bytesRead = file.readsome(buffer = new char[chunkSize], chunkSize)) == chunkSize) {
-        string chunk(buffer, bytesRead);
+        vector<char> chunk;
+        for(unsigned int i = 0; i < bytesRead; i++) {
+            chunk.push_back(buffer[i]);
+        }
 
-        if(frequency.find(buffer) == frequency.end()) {
+        if(frequency.find(chunk) == frequency.end()) {
             frequency[chunk] = 1;
         }
         else {
@@ -40,7 +44,11 @@ void FileReader::read(vector<string> &data, unordered_map<string, unsigned int> 
     }
 
     if(bytesRead > 0) {
-        string chunk(buffer, bytesRead);
+        vector<char> chunk;
+        for(unsigned int i = 0; i < bytesRead; i++) {
+            chunk.push_back(buffer[i]);
+        }
+
         data.push_back(chunk);
     }
 }

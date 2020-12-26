@@ -1,11 +1,10 @@
 // huffman_tree_builder.cpp
 // Ashish
 
-#include <string>
 #include <vector>
-#include <unordered_map>
 #include <queue>
-#include <iostream>
+#include <unordered_map>
+#include "vector_hash.hpp"
 #include "huffman_code.hpp"
 #include "huffman_tree_node.hpp"
 #include "huffman_tree_builder.hpp"
@@ -13,9 +12,9 @@
 using namespace std;
 
 
-HuffmanTreeNode* buildHuffmanTree(unordered_map<string, unsigned int> &frequency) {
+HuffmanTreeNode* buildHuffmanTree(unordered_map<vector<char>, unsigned int, VectorHash<vector<char>>> &frequency, vector<vector<char>> &singular) {
     // Get list of symbols with singular frequencies
-    vector<string> singular = replaceSingularFrequencies(frequency);
+    singular = replaceSingularFrequencies(frequency);
 
     // Build priority queue of Huffman tree nodes
     class HuffmanTreeNodeComparator {
@@ -42,15 +41,11 @@ HuffmanTreeNode* buildHuffmanTree(unordered_map<string, unsigned int> &frequency
         priorityQueue.push(huffmanTreeNode);
     }
 
-    // Assign variable-length codes to each symbol
-    HuffmanTreeNode *root = priorityQueue.top();
-    assignCodes(root);
-
-    return root;
+    return priorityQueue.top();
 }
 
-vector<string> replaceSingularFrequencies(unordered_map<string, unsigned int> &frequency) {
-    vector<string> singular;
+vector<vector<char>> replaceSingularFrequencies(unordered_map<vector<char>, unsigned int, VectorHash<vector<char>>> &frequency) {
+    vector<vector<char>> singular;
     for(auto symbol : frequency) {
         if(symbol.second == 1) singular.push_back(symbol.first);
     }
@@ -63,11 +58,15 @@ vector<string> replaceSingularFrequencies(unordered_map<string, unsigned int> &f
     return singular;
 }
 
-void assignCodes(HuffmanTreeNode *node, vector<char> stack) {
+unordered_map<vector<char>, HuffmanCode, VectorHash<vector<char>>> assignHuffmanCodes(HuffmanTreeNode *node, vector<char> stack) {
+    unordered_map<vector<char>, HuffmanCode, VectorHash<vector<char>>> symbolTable;
+
+    // Assign Huffman code if node is a leaf
     if(node->isLeaf()) {
-        string code;
+        vector<char> code;
         char c = 0;
-        for(unsigned int i = 0; i < stack.size(); i++) {
+        unsigned int i;
+        for(i = 0; i < stack.size(); i++) {
             c |= stack[i] << ((7 - i) % 8);
             if(i % 8 == 7) {
                 code.push_back(c);
@@ -75,14 +74,26 @@ void assignCodes(HuffmanTreeNode *node, vector<char> stack) {
             }
         }
 
-        if(c != 0) code.push_back(c);
+        if(i % 8 != 0) code.push_back(c);
 
-        node->setHuffmanCode(HuffmanCode(code, stack.size()));
+        HuffmanCode huffmanCode(code, stack.size());
+        symbolTable[node->getSymbol()] = huffmanCode;
+        node->setHuffmanCode(huffmanCode);
     }
 
+    // Recursively assign Huffman codes on left subtree
     stack.push_back(0);
-    if(node->getLeft() != nullptr) assignCodes(node->getLeft(), stack);
+    if(node->getLeft() != nullptr) {
+        unordered_map<vector<char>, HuffmanCode, VectorHash<vector<char>>> leftSymbolTable = assignHuffmanCodes(node->getLeft(), stack);
+        symbolTable.insert(leftSymbolTable.begin(), leftSymbolTable.end());
+    }
 
+    // Recursively assign Huffman codes on right subtree
     stack[stack.size() - 1] = 1;
-    if(node->getRight() != nullptr) assignCodes(node->getRight(), stack);
+    if(node->getRight() != nullptr) {
+        unordered_map<vector<char>, HuffmanCode, VectorHash<vector<char>>> rightSymbolTable = assignHuffmanCodes(node->getRight(), stack);
+        symbolTable.insert(rightSymbolTable.begin(), rightSymbolTable.end());
+    }
+
+    return symbolTable;
 }
