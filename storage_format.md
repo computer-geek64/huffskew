@@ -16,3 +16,6 @@ Position | Size | Purpose
 10 | 1 byte | Number of replacement values (*e*)
 11 | *b* bytes | Replacement value
 12 | N/A | Repeat position 11 for all *e - 1* replacement values (excluding the first value, which is already in the symbol table)
+13 | 4 bits | Number of bytes (*f*) in data length
+14 | *f* bytes | Number of symbols (*g*) in data
+15 | *g* codes | Data

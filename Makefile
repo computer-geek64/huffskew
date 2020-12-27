@@ -14,7 +14,7 @@ huffskew: main.o compress.o compress_file_reader.o compress_file_writer.o huffma
 main.o: src/main.cpp src/main.hpp src/compress.hpp
 	$(CC) -c $< -o $@
 
-compress.o: src/compress.cpp src/compress.hpp src/compress_file_reader.hpp src/compress_file_writer.hpp src/huffman_tree_node.hpp src/huffman_tree_builder.hpp src/vector_hash.hpp
+compress.o: src/compress.cpp src/compress.hpp src/compress_file_reader.hpp src/compress_file_writer.hpp src/huffman_tree_builder.hpp src/huffman_tree_node.hpp src/huffman_code.hpp src/vector_hash.hpp
 	$(CC) -c $< -o $@
 
 compress_file_reader.o: src/compress_file_reader.cpp src/compress_file_reader.hpp src/vector_hash.hpp

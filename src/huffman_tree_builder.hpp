@@ -15,4 +15,6 @@ HuffmanTreeNode* buildHuffmanTree(std::unordered_map<std::vector<char>, unsigned
 
 std::unordered_map<std::vector<char>, HuffmanCode, VectorHash<std::vector<char>>> assignHuffmanCodes(HuffmanTreeNode*, std::vector<char> = std::vector<char>());
 
+void destroyHuffmanTree(HuffmanTreeNode*);
+
 #endif

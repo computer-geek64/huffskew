@@ -54,7 +54,7 @@ void FileWriter::write(vector<char> data, size_t dataLength) {
 }
 
 void FileWriter::flush() {
-    if(bufferLength >= 0) {
+    if(bufferLength > 0) {
         file.put(buffer);
     }
 

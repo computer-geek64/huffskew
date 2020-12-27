@@ -12,7 +12,6 @@
 #include "huffman_tree_node.hpp"
 #include "huffman_tree_builder.hpp"
 #include "compress.hpp"
-#include <iostream>
 
 using namespace std;
 
@@ -82,31 +81,33 @@ void compress(string inputFilename, string outputFilename, size_t chunkSize) {
         fileWriter.write(singular[i]);
     }
 
-    /*map<vector<char>, HuffmanCode> symbolTable = assignHuffmanCodes(root);
+    // Write number of bytes in data length
+    size_t dataLength = data.size();
+    unsigned int dataLengthBytes;
+    for(dataLengthBytes = 0; dataLength > 0; dataLengthBytes++) dataLength >>= 8;
+    fileWriter.write(vector<char>(1, (unsigned char) dataLengthBytes << 4), 4);
+
+    // Write data length (number of symbols in data)
+    dataLength = data.size();
+    vector<char> dataLengthVector;
+    for(int i = dataLengthBytes - 1; i >= 0; i--) {
+        dataLengthVector.push_back((unsigned char) (dataLength >> i * 8));
+    }
+    fileWriter.write(dataLengthVector);
+
+    // Add replacement values into symbol table for actual data compression
     for(unsigned int i = 1; i < singular.size(); i++) {
         symbolTable[singular[i]] = symbolTable[singular[0]];
     }
 
-    for(auto symbol : symbolTable) {
-        cout << symbol.first[0] << ": " << hex << (short) symbol.second.getCode()[0] << ": " << dec << symbol.second.getLength() << endl;
+    // Compress actual data
+    for(unsigned int i = 0; i < data.size(); i++) {
+        HuffmanCode symbolCode = symbolTable[data[i]];
+        fileWriter.write(symbolCode.getCode(), symbolCode.getLength());
     }
 
-    // Prints huffman compression of file
-    HuffmanCode curr = symbolTable[data[0]];
-    HuffmanCode next;
-    for(unsigned int i = 0; i < data.size() - 1; i++) {
-        next = symbolTable[data[i + 1]];
-
-        curr = concatenateHuffmanCodes(curr, next);
-        cout << "Size: " << curr.getCode().size() << endl;
-        cout << "Length: " << curr.getLength() << endl;
-        for(char c : curr.getFullBytes()) {
-            cout << "NEW BYTES: " << hex << (short) c << endl;
-        }
-        cout << "New size: " << curr.getCode().size() << endl;
-        cout << "New length: " << curr.getLength() << endl;
-    }
-    cout << hex << (short) curr.getCode()[0] << endl;*/
+    // Destroy Huffman tree
+    destroyHuffmanTree(root);
 }
 
 void replaceSingularFrequencies(unordered_map<vector<char>, unsigned int, VectorHash<vector<char>>> &frequencies, const vector<vector<char>> &singular) {

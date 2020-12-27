@@ -4,7 +4,6 @@
 #include <cstddef>
 #include <string>
 #include <iostream>
-#include <vector>
 #include "compress.hpp"
 #include "main.hpp"
 

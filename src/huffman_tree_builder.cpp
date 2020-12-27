@@ -81,3 +81,9 @@ unordered_map<vector<char>, HuffmanCode, VectorHash<vector<char>>> assignHuffman
 
     return symbolTable;
 }
+
+void destroyHuffmanTree(HuffmanTreeNode *node) {
+    if(node->getLeft() != nullptr) destroyHuffmanTree(node->getLeft());
+    if(node->getRight() != nullptr) destroyHuffmanTree(node->getRight());
+    delete node;
+}
