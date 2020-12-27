@@ -13,7 +13,6 @@ using namespace std;
 
 
 HuffmanTreeNode* buildHuffmanTree(unordered_map<vector<char>, unsigned int, VectorHash<vector<char>>> &frequencies) {
-
     // Build priority queue of Huffman tree nodes
     class HuffmanTreeNodeComparator {
     public:

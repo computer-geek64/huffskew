@@ -52,7 +52,4 @@ HuffmanCode HuffmanTreeNode::getHuffmanCode() const {
     return huffmanCode;
 }
 
-HuffmanTreeNode::~HuffmanTreeNode() {
-    delete left;
-    delete right;
-}
+HuffmanTreeNode::~HuffmanTreeNode() {}
