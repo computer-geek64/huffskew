@@ -38,14 +38,15 @@ void compress(string inputFilename, string outputFilename, size_t chunkSize) {
     // Write to file
     FileWriter fileWriter(outputFilename);
 
+    // Write number of bytes in each symbol
+    fileWriter.write(vector<char>(1, (unsigned char) chunkSize << 4), 4);
+
     // Write number of rows in symbol table
     vector<char> symbolTableRows;
-    symbolTableRows.push_back((unsigned char) ((unsigned short) symbolTable.size() >> 8));
-    symbolTableRows.push_back((unsigned char) symbolTable.size());
+    for(unsigned int i = 0; i < chunkSize * 8; i += 8) {
+        symbolTableRows.push_back((unsigned char) (symbolTable.size() >> i));
+    }
     fileWriter.write(symbolTableRows);
-
-    // Write number of bytes in each symbol
-    fileWriter.write(vector<char>(1, (char) chunkSize));
 
     // Write symbol table
     for(const auto &symbol : symbolTable) {
