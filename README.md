@@ -27,6 +27,16 @@ sudo make uninstall
 
 ## Usage
 
+```
+huffskew [action] [filename] -o [filename]
+
+Option          Description
+-h              Show this help screen
+-c [filename]   Compress action
+-u [filename]   Uncompress action
+-o [filename]   Output filename
+```
+
 
 ## Developers
 
