@@ -26,11 +26,9 @@ void BitReader::open(const string filename) {
 vector<char> BitReader::read(const size_t bits) {
     vector<char> bytes;
     for(unsigned int i = 0; i < bits / 8; i++) {
-        if(file.eof()) {
-            return bytes;
-        }
-
         char byte = file.get();
+        if(file.eof()) return bytes;
+
         bytes.push_back(buffer | (unsigned char) byte >> bufferLength);
         buffer = byte << (8 - bufferLength);
     }
@@ -44,11 +42,9 @@ vector<char> BitReader::read(const size_t bits) {
         bufferLength -= bits % 8;
     }
     else {
-        if(file.eof()) {
-            return bytes;
-        }
-
         char byte = file.get();
+        if(file.eof()) return bytes;
+
         bytes.push_back((buffer | (unsigned char) byte >> bufferLength) & -1 << (8 - bits % 8));
         buffer = byte << (bits % 8 - bufferLength);
         bufferLength += (8 - bits % 8);
