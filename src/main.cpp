@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include "compress.hpp"
+#include "uncompress.hpp"
 #include "main.hpp"
 
 using namespace std;
@@ -34,6 +35,7 @@ int main(int argc, char **argv) {
     string outputFilename(args[4]);
 
     compress(inputFilename, outputFilename);
+    //uncompress(inputFilename, outputFilename);
 
     return 0;
 }

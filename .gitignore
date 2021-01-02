@@ -3,8 +3,10 @@
 huffskew
 main.o
 compress.o
-compress_file_reader.o
-compress_file_writer.o
+uncompress.o
+bit_reader.o
+bit_writer.o
+file_analyzer.o
 huffman_tree_builder.o
 huffman_tree_node.o
 huffman_code.o

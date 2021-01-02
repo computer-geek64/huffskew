@@ -1,4 +1,4 @@
-// file_reader.cpp
+// file_analyzer.cpp
 // Ashish D'Souza
 
 #include <cstddef>
@@ -7,29 +7,30 @@
 #include <vector>
 #include <unordered_map>
 #include "vector_hash.hpp"
-#include "compress_file_reader.hpp"
+#include "file_analyzer.hpp"
 
 using namespace std;
 
 
-FileReader::FileReader(const string filename, const size_t chunkSize) {
+FileAnalyzer::FileAnalyzer(const string filename, const size_t chunkSize) {
     open(filename, chunkSize);
 }
 
-void FileReader::open(const string filename, const size_t chunkSize) {
+void FileAnalyzer::open(const string filename, const size_t chunkSize) {
     this->filename = filename;
     this->chunkSize = chunkSize;
 
     file = ifstream(filename, fstream::binary);
 }
 
-void FileReader::read(vector<vector<char>> &data, unordered_map<vector<char>, unsigned int, VectorHash<vector<char>>> &frequencies, vector<vector<char>> &singular) {
+size_t FileAnalyzer::read(unordered_map<vector<char>, unsigned int, VectorHash<vector<char>>> &frequencies, vector<vector<char>> &singular) {
     char buffer[chunkSize];
-    size_t bytesRead;
+    size_t chunks = 0;
 
-    while((bytesRead = file.readsome(buffer, chunkSize)) == chunkSize) {
+    file.read(buffer, chunkSize);
+    while(!file.eof()) {
         vector<char> chunk;
-        for(unsigned int i = 0; i < bytesRead; i++) {
+        for(unsigned int i = 0; i < chunkSize; i++) {
             chunk.push_back(buffer[i]);
         }
 
@@ -48,19 +49,13 @@ void FileReader::read(vector<vector<char>> &data, unordered_map<vector<char>, un
             }
         }
 
-        data.push_back(chunk);
+        chunks++;
+        file.read(buffer, chunkSize);
     }
 
-    if(bytesRead > 0) {
-        vector<char> chunk;
-        for(unsigned int i = 0; i < bytesRead; i++) {
-            chunk.push_back(buffer[i]);
-        }
-
-        data.push_back(chunk);
-    }
+    return chunks;
 }
 
-FileReader::~FileReader() {
+FileAnalyzer::~FileAnalyzer() {
     file.close();
 }

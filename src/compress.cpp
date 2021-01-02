@@ -6,8 +6,9 @@
 #include <vector>
 #include <unordered_map>
 #include "vector_hash.hpp"
-#include "compress_file_reader.hpp"
-#include "compress_file_writer.hpp"
+#include "file_analyzer.hpp"
+#include "bit_reader.hpp"
+#include "bit_writer.hpp"
 #include "huffman_code.hpp"
 #include "huffman_tree_node.hpp"
 #include "huffman_tree_builder.hpp"
@@ -17,13 +18,12 @@ using namespace std;
 
 
 void compress(string inputFilename, string outputFilename, size_t chunkSize) {
-    // Read data from file
-    FileReader fileReader(inputFilename, chunkSize);
-    vector<vector<char>> data;
+    // Analyze file
+    FileAnalyzer fileAnalyzer(inputFilename, chunkSize);
     unordered_map<vector<char>, unsigned int, VectorHash<vector<char>>> frequencies;
     vector<vector<char>> singular;
 
-    fileReader.read(data, frequencies, singular);
+    size_t totalChunks = fileAnalyzer.read(frequencies, singular);
 
     // Optimize algorithm by replacing singular frequencies
     replaceSingularFrequencies(frequencies, singular);
@@ -35,65 +35,65 @@ void compress(string inputFilename, string outputFilename, size_t chunkSize) {
     unordered_map<vector<char>, HuffmanCode, VectorHash<vector<char>>> symbolTable = assignHuffmanCodes(root);
 
     // Write to file
-    FileWriter fileWriter(outputFilename);
+    BitWriter bitWriter(outputFilename);
 
     // Write number of bytes in each symbol
-    fileWriter.write(vector<char>(1, (unsigned char) chunkSize << 4), 4);
+    bitWriter.write(vector<char>(1, (unsigned char) chunkSize << 4), 4);
 
     // Write number of rows in symbol table
     vector<char> symbolTableRows;
     for(unsigned int i = 0; i < chunkSize * 8; i += 8) {
         symbolTableRows.push_back((unsigned char) (symbolTable.size() >> i));
     }
-    fileWriter.write(symbolTableRows);
+    bitWriter.write(symbolTableRows);
 
     // Write symbol table
     for(const auto &symbol : symbolTable) {
         if(singular.empty() || symbol.first != singular[0]) {
             // Write symbol
-            fileWriter.write(symbol.first);
+            bitWriter.write(symbol.first);
 
             // Write number of bits in symbol code
-            fileWriter.write(vector<char>(1, (unsigned char) symbol.second.getLength()));
+            bitWriter.write(vector<char>(1, (unsigned char) symbol.second.getLength()));
 
             // Write symbol code
-            fileWriter.write(symbol.second.getCode(), symbol.second.getLength());
+            bitWriter.write(symbol.second.getCode(), symbol.second.getLength());
         }
     }
 
     if(!singular.empty()) {
         // Write replacement symbol
-        fileWriter.write(singular[0]);
+        bitWriter.write(singular[0]);
 
         // Write number of bits in replacement symbol code
         HuffmanCode symbolCode = symbolTable[singular[0]];
-        fileWriter.write(vector<char>(1, (unsigned char) symbolCode.getLength()));
+        bitWriter.write(vector<char>(1, (unsigned char) symbolCode.getLength()));
 
         // Write replacement symbol code
-        fileWriter.write(symbolCode.getCode(), symbolCode.getLength());
+        bitWriter.write(symbolCode.getCode(), symbolCode.getLength());
     }
 
     // Write number of replacement values
-    fileWriter.write(vector<char>(1, (unsigned char) singular.size()));
+    bitWriter.write(vector<char>(1, (unsigned char) singular.size()));
 
     // Write replacement values (excluding first one, which is the replacement symbol itself and already in the symbol table)
     for(unsigned int i = 1; i < singular.size(); i++) {
-        fileWriter.write(singular[i]);
+        bitWriter.write(singular[i]);
     }
 
     // Write number of bytes in data length
-    size_t dataLength = data.size();
+    size_t dataLength = totalChunks;
     unsigned int dataLengthBytes;
     for(dataLengthBytes = 0; dataLength > 0; dataLengthBytes++) dataLength >>= 8;
-    fileWriter.write(vector<char>(1, (unsigned char) dataLengthBytes << 4), 4);
+    bitWriter.write(vector<char>(1, (unsigned char) dataLengthBytes << 4), 4);
 
     // Write data length (number of symbols in data)
-    dataLength = data.size();
+    dataLength = totalChunks;
     vector<char> dataLengthVector;
     for(int i = dataLengthBytes - 1; i >= 0; i--) {
         dataLengthVector.push_back((unsigned char) (dataLength >> i * 8));
     }
-    fileWriter.write(dataLengthVector);
+    bitWriter.write(dataLengthVector);
 
     // Add replacement values into symbol table for actual data compression
     for(unsigned int i = 1; i < singular.size(); i++) {
@@ -101,9 +101,10 @@ void compress(string inputFilename, string outputFilename, size_t chunkSize) {
     }
 
     // Compress actual data
-    for(unsigned int i = 0; i < data.size(); i++) {
-        HuffmanCode symbolCode = symbolTable[data[i]];
-        fileWriter.write(symbolCode.getCode(), symbolCode.getLength());
+    BitReader bitReader(inputFilename);
+    for(size_t i = 0; i < totalChunks; i++) {
+        HuffmanCode symbolCode = symbolTable[bitReader.read(chunkSize * 8)];
+        bitWriter.write(symbolCode.getCode(), symbolCode.getLength());
     }
 
     // Destroy Huffman tree

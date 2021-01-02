@@ -1,19 +1,19 @@
-// compress_file_writer.cpp
+// bit_writer.cpp
 // Ashish D'Souza
 
 #include <fstream>
 #include <string>
 #include <vector>
-#include "compress_file_writer.hpp"
+#include "bit_writer.hpp"
 
 using namespace std;
 
 
-FileWriter::FileWriter(const string filename) {
+BitWriter::BitWriter(const string filename) {
     open(filename);
 }
 
-void FileWriter::open(const string filename) {
+void BitWriter::open(const string filename) {
     this->filename = filename;
     buffer = 0;
     bufferLength = 0;
@@ -21,11 +21,11 @@ void FileWriter::open(const string filename) {
     file = ofstream(filename, fstream::binary);
 }
 
-void FileWriter::write(vector<char> data) {
+void BitWriter::write(vector<char> data) {
     write(data, data.size() * 8);
 }
 
-void FileWriter::write(vector<char> data, size_t dataLength) {
+void BitWriter::write(vector<char> data, size_t dataLength) {
     for(unsigned int i = 0; i < dataLength / 8; i++) {
         char o = buffer | (unsigned char) data[i] >> bufferLength;
         file.put(o);
@@ -53,7 +53,7 @@ void FileWriter::write(vector<char> data, size_t dataLength) {
     }
 }
 
-void FileWriter::flush() {
+void BitWriter::flush() {
     if(bufferLength > 0) {
         file.put(buffer);
     }
@@ -61,7 +61,7 @@ void FileWriter::flush() {
     file.flush();
 }
 
-FileWriter::~FileWriter() {
+BitWriter::~BitWriter() {
     flush();
     file.close();
 }

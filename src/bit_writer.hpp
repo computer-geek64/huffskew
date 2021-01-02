@@ -1,8 +1,8 @@
-// compress_file_writer.hpp
+// bit_writer.hpp
 // Ashish D'Souza
 
-#ifndef COMPRESS_FILE_WRITER_HPP
-#define COMPRESS_FILE_WRITER_HPP
+#ifndef BIT_WRITER_HPP
+#define BIT_WRITER_HPP
 
 #include <cstddef>
 #include <fstream>
@@ -10,14 +10,14 @@
 #include <vector>
 
 
-class FileWriter {
+class BitWriter {
     std::string filename;
     std::ofstream file;
     char buffer;
     std::size_t bufferLength;
 
 public:
-    FileWriter(const std::string);
+    BitWriter(const std::string);
 
     void open(const std::string);
 
@@ -27,7 +27,7 @@ public:
 
     void flush();
 
-    ~FileWriter();
+    ~BitWriter();
 };
 
 #endif
