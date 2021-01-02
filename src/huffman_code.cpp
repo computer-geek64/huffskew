@@ -32,5 +32,8 @@ size_t HuffmanCode::getLength() const {
     return length;
 }
 
-HuffmanCode::~HuffmanCode() {
+bool HuffmanCode::operator==(const HuffmanCode &huffmanCode) const {
+    return code == huffmanCode.getCode() && length == huffmanCode.getLength();
 }
+
+HuffmanCode::~HuffmanCode() {}

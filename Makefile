@@ -14,10 +14,10 @@ huffskew: main.o compress.o uncompress.o bit_reader.o bit_writer.o file_analyzer
 main.o: src/main.cpp src/main.hpp src/compress.hpp src/uncompress.hpp
 	$(CC) -c $< -o $@
 
-compress.o: src/compress.cpp src/compress.hpp src/file_analyzer.hpp src/bit_reader.hpp src/bit_writer.hpp src/huffman_tree_builder.hpp src/huffman_tree_node.hpp src/huffman_code.hpp src/vector_hash.hpp
+compress.o: src/compress.cpp src/compress.hpp src/file_analyzer.hpp src/bit_reader.hpp src/bit_writer.hpp src/huffman_tree_builder.hpp src/huffman_tree_node.hpp src/huffman_code.hpp src/hash_functions.hpp
 	$(CC) -c $< -o $@
 
-uncompress.o: src/uncompress.cpp src/uncompress.hpp src/bit_reader.hpp
+uncompress.o: src/uncompress.cpp src/uncompress.hpp src/bit_reader.hpp src/bit_writer.hpp src/huffman_code.hpp src/hash_functions.hpp
 	$(CC) -c $< -o $@
 
 bit_reader.o: src/bit_reader.cpp src/bit_reader.hpp
@@ -26,10 +26,10 @@ bit_reader.o: src/bit_reader.cpp src/bit_reader.hpp
 bit_writer.o: src/bit_writer.cpp src/bit_writer.hpp
 	$(CC) -c $< -o $@
 
-file_analyzer.o: src/file_analyzer.cpp src/file_analyzer.hpp src/vector_hash.hpp
+file_analyzer.o: src/file_analyzer.cpp src/file_analyzer.hpp src/hash_functions.hpp
 	$(CC) -c $< -o $@
 
-huffman_tree_builder.o: src/huffman_tree_builder.cpp src/huffman_tree_builder.hpp src/huffman_tree_node.hpp src/huffman_code.hpp src/vector_hash.hpp
+huffman_tree_builder.o: src/huffman_tree_builder.cpp src/huffman_tree_builder.hpp src/huffman_tree_node.hpp src/huffman_code.hpp src/hash_functions.hpp
 	$(CC) -c $< -o $@
 
 huffman_tree_node.o: src/huffman_tree_node.cpp src/huffman_tree_node.hpp src/huffman_code.hpp

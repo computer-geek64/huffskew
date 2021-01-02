@@ -23,6 +23,8 @@ public:
 
     std::size_t getLength() const;
 
+    bool operator==(const HuffmanCode&) const;
+
     ~HuffmanCode();
 };
 

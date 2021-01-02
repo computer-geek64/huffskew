@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "vector_hash.hpp"
+#include "hash_functions.hpp"
 
 
 class FileAnalyzer {

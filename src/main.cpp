@@ -14,7 +14,6 @@ using namespace std;
 int main(int argc, char **argv) {
     if(argc < 5) {
         showHelp();
-
         return 1;
     }
 
@@ -23,7 +22,6 @@ int main(int argc, char **argv) {
         string arg(*(argv + i));
         if(arg == "-h") {
             showHelp();
-
             return 0;
         }
 
@@ -34,8 +32,16 @@ int main(int argc, char **argv) {
     string inputFilename(args[2]);
     string outputFilename(args[4]);
 
-    compress(inputFilename, outputFilename);
-    //uncompress(inputFilename, outputFilename);
+    if(action == "-c") {
+        compress(inputFilename, outputFilename);
+    }
+    else if(action == "-u") {
+        uncompress(inputFilename, outputFilename);
+    }
+    else {
+        showHelp();
+        return 1;
+    }
 
     return 0;
 }
@@ -47,5 +53,5 @@ void showHelp() {
     cout << "-h\t\tShow this help screen" << "\n";
     cout << "-c [filename]\tCompress action" << "\n";
     cout << "-u [filename]\tUncompress action" << "\n";
-    cout << "-o [filename]\tOutput file, use \"-\" for STDOUT" << endl;
+    cout << "-o [filename]\tOutput filename" << endl;
 }

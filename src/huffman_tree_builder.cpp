@@ -4,7 +4,7 @@
 #include <vector>
 #include <queue>
 #include <unordered_map>
-#include "vector_hash.hpp"
+#include "hash_functions.hpp"
 #include "huffman_code.hpp"
 #include "huffman_tree_node.hpp"
 #include "huffman_tree_builder.hpp"

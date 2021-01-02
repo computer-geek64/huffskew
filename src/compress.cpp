@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "vector_hash.hpp"
+#include "hash_functions.hpp"
 #include "file_analyzer.hpp"
 #include "bit_reader.hpp"
 #include "bit_writer.hpp"
@@ -102,7 +102,7 @@ void compress(string inputFilename, string outputFilename, size_t chunkSize) {
 
     // Compress actual data
     BitReader bitReader(inputFilename);
-    for(size_t i = 0; i < totalChunks; i++) {
+    for(unsigned long i = 0; i < totalChunks; i++) {
         HuffmanCode symbolCode = symbolTable[bitReader.read(chunkSize * 8)];
         bitWriter.write(symbolCode.getCode(), symbolCode.getLength());
     }

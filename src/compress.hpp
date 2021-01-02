@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "vector_hash.hpp"
+#include "hash_functions.hpp"
 
 
 void compress(std::string, std::string, std::size_t = 1);
