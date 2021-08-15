@@ -47,9 +47,9 @@ Option          Description
 Ashish D'Souza - [@computer-geek64](https://github.com/computer-geek64)
 
 
-## Releases
+<!--## Releases
 
-**Huffskew** is currently under development, no stable releases exist yet.
+**Huffskew** is currently under development, no stable releases exist yet.-->
 <!--The current stable release for **Huffskew** is [v1.0.0](https://github.com/computer-geek64/huffskew/releases/latest)-->
 
 
